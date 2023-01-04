@@ -1,5 +1,8 @@
 import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import database from './data_setup.js';
+import './data_setup.js'
 import {
   Modal,
   ModalOverlay,
@@ -10,9 +13,27 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react'
 
-import { useDisclosure,Button,FormLabel,Input,FormControl } from '@chakra-ui/react'
+import { useDisclosure,Button,FormLabel,Input,FormControl,Textarea,Text } from '@chakra-ui/react'
 
 function App() {
+ 
+
+  const [message, setMessage] = useState('');
+  const [updated, setUpdated] = useState(message);
+  const handleChange = (event) => {
+    setMessage(event.target.value);
+  };
+  const handleClick = () => {
+    setUpdated(message);
+  };
+
+  
+  const Push = () => {
+    database.ref("user").set({
+      message : message
+    }).catch(alert);
+  }
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -26,15 +47,22 @@ function App() {
           <ModalCloseButton />
           <ModalBody>
           <FormControl>
-              <FormLabel>Type your location:</FormLabel>
-              <Input  placeholder='Location...' />
+            
+              <FormLabel>Input your location:</FormLabel>
+          <Input  type="text"
+                  id="message"
+                  name="message"
+                  onChange={handleChange}
+                  value={message}
+                  placeholder='Your location'/>
             </FormControl>
 
           
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+          <h2>Updated: {updated}</h2>
+            <Button colorScheme='blue' mr={3} onClick={Push}>
               Send
             </Button>
             <Button onClick = {onClose} variant='ghost'>Cancel</Button>
