@@ -1,8 +1,9 @@
 import logo from './logo.svg';
 import { useState } from 'react';
 import './App.css';
-import database from './data_setup.js';
+import app from './data_setup.js';
 import './data_setup.js'
+import { getDatabase, ref, set } from "firebase/database";
 import {
   Modal,
   ModalOverlay,
@@ -12,6 +13,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
+
 
 import { useDisclosure,Button,FormLabel,Input,FormControl,Textarea,Text } from '@chakra-ui/react'
 
@@ -27,11 +29,12 @@ function App() {
     setUpdated(message);
   };
 
-  
+  console.log(message)
   const Push = () => {
-    database.ref("user").set({
+    const db = getDatabase();
+    set(ref(db, 'users/'), {
       message : message
-    }).catch(alert);
+    });
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -61,7 +64,7 @@ function App() {
           </ModalBody>
 
           <ModalFooter>
-          <h2>Updated: {updated}</h2>
+          
             <Button colorScheme='blue' mr={3} onClick={Push}>
               Send
             </Button>
