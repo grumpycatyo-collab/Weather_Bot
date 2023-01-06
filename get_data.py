@@ -4,6 +4,8 @@ from lxml import html
 import requests
 from bs4 import BeautifulSoup
 from firebase import Firebase
+from geopy.geocoders import Nominatim
+ 
 
 config = {
   "apiKey": "AIzaSyCuPGh4E12VM982Nv5YtqjZ7aYfkS4Tz6E",
@@ -26,6 +28,14 @@ query = ''
 for element in message:
    query = message[element]
 
-print(query)
 
 
+loc = Nominatim(user_agent="GetLoc")
+ 
+
+getLoc = loc.geocode(f"{query}")
+
+print(getLoc.address)
+
+print("Latitude = ", getLoc.latitude, "\n")
+print("Longitude = ", getLoc.longitude)
