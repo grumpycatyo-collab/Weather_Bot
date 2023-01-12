@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import './App.css';
 import app from './data_setup.js';
 import './data_setup.js'
@@ -22,11 +22,12 @@ function App() {
 
   const [message, setMessage] = useState('');
   const [updated, setUpdated] = useState(message);
+  const [extracted, setExtracted] = useState('');
   const handleChange = (event) => {
     setMessage(event.target.value);
   };
   const handleClick = () => {
-    setUpdated(message);
+    setUpdated(message);  
   };
 
   console.log(message)
@@ -36,6 +37,12 @@ function App() {
       message : message
     });
   }
+
+  useEffect(() => {
+    fetch('/data').then(res => res.json()).then(data => {
+      setExtracted(data.extract);
+    });
+  }, []);
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
@@ -64,7 +71,7 @@ function App() {
           </ModalBody>
 
           <ModalFooter>
-          
+          <p> {extracted}.</p>
             <Button colorScheme='blue' mr={3} onClick={Push}>
               Send
             </Button>

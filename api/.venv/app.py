@@ -34,13 +34,10 @@ for element in message:
 
 
 
-
-
-
 loc = Nominatim(user_agent="GetLoc")
 getLoc = loc.geocode(f"{query}")
 extract = db.child("extract").push(f"{getLoc.latitude},{getLoc.longitude}")
 
-@app.route("/")
+@app.route('/')
 def home():
-    return "Hello, Flask!"
+    return {'extract': f"{getLoc.latitude},{getLoc.longitude}"}
