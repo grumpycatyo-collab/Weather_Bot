@@ -30,7 +30,7 @@ function App() {
   };
 
   console.log(message)
-  const Push = () => {
+  const Push = () => {  
     const db = getDatabase();
     set(ref(db, 'users/'), {
       message : message
