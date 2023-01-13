@@ -39,10 +39,11 @@ function App() {
   }
 
   useEffect(() => {
-    fetch('/data').then(res => res.json()).then(data => {
+    fetch('/').then(res => res.json()).then(data => {
       setExtracted(data.extract);
-    });
+    }); 
   }, []);
+//i kind of searched for info, didn't got any, so I am gone to learn some flask and to do a small project on it
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
