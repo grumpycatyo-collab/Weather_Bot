@@ -1,9 +1,10 @@
 import logo from './logo.svg';
 import { useState,useEffect } from 'react';
 import './App.css';
+import axios from "axios";
 import app from './data_setup.js';
 import './data_setup.js'
-import { getDatabase, ref, set } from "firebase/database";
+import { get, getDatabase, ref, set } from "firebase/database";
 import {
   Modal,
   ModalOverlay,
@@ -22,7 +23,9 @@ function App() {
 
   const [message, setMessage] = useState('');
   const [updated, setUpdated] = useState(message);
-  const [extracted, setExtracted] = useState('');
+
+  const [profileData, setProfileData] = useState(null)
+
   const handleChange = (event) => {
     setMessage(event.target.value);
   };
@@ -38,11 +41,24 @@ function App() {
     });
   }
 
-  useEffect(() => {
-    fetch('/').then(res => res.json()).then(data => {
-      setExtracted(data.extract);
-    }); 
-  }, []);
+  function getData() {
+    axios({
+      method: "GET",
+      url:"/profile",
+    })
+    .then((response) => {
+      const res =response.data
+      setProfileData(({
+        extracted: res.extract}))
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response)
+        console.log(error.response.status)
+        console.log(error.response.headers)
+        }
+    })}
+
+  
 //i kind of searched for info, didn't got any, so I am gone to learn some flask and to do a small project on it
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -72,8 +88,11 @@ function App() {
           </ModalBody>
 
           <ModalFooter>
-          <p> {extracted}.</p>
-            <Button colorScheme='blue' mr={3} onClick={Push}>
+          <p> {profileData.extracted}.</p>
+            <Button colorScheme='blue' mr={3}  onClick={() => {
+          Push();
+          getData();
+        }}>
               Send
             </Button>
             <Button onClick = {onClose} variant='ghost'>Cancel</Button>

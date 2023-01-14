@@ -38,6 +38,9 @@ loc = Nominatim(user_agent="GetLoc")
 getLoc = loc.geocode(f"{query}")
 extract = db.child("extract").push(f"{getLoc.latitude},{getLoc.longitude}")
 
-@app.route('/')
+@app.route('/profile')
 def home():
-    return {'extract': f"{getLoc.latitude},{getLoc.longitude}"}
+    response_body = {
+        "extract": f"{getLoc.latitude},{getLoc.longitude}"
+    }
+    return response_body
